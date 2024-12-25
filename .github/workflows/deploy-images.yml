@@ -3,9 +3,11 @@ name: Create and publish Docker images
 on:
   push:
     branches: ['release']
+    tags: ['v*']
 
 env:
   REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
   build-and-push-images:
@@ -34,7 +36,12 @@ jobs:
         id: meta-backend
         uses: docker/metadata-action@v4
         with:
-          images: ${{ env.REGISTRY }}/${{ github.repository }}/server
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/server
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,patthern={{version}}
+            type=semver,patter={{major}}.{{minor}}
 
       - name: Build and push backend Docker image
         id: push-backend
@@ -50,7 +57,7 @@ jobs:
         id: meta-frontend
         uses: docker/metadata-action@v4
         with:
-          images: ${{ env.REGISTRY }}/${{ github.repository }}/devopsapp
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/devopsapp
 
       - name: Build and push frontend Docker image
         id: push-frontend
