@@ -23,7 +23,7 @@ export class YoutubeEmbedComponent  implements OnInit{
       const data = await response.json();
       this.videoUrl = data.url;
     } catch (err) {
-      console.error('Error fetching video URL:', err);
+      console.log('Error fetching video URL:', err);
       this.error = 'Failed to load the video. Make sure the backend is running on port 3100';
     }
   }

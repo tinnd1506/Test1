@@ -2,6 +2,7 @@
 devopsapp/.angular/
 devopsapp/.vscode/
 devopsapp/.idea/
+devopsapp/coverage/
 devopsapp/dist/
 devopsapp/node_modules/
 
