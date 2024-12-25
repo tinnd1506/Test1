@@ -34,7 +34,7 @@ jobs:
         id: meta-backend
         uses: docker/metadata-action@v4
         with:
-          images: ${{ env.REGISTRY }}/server
+          images: ${{ env.REGISTRY }}/${{ github.repository }}/server
 
       - name: Build and push backend Docker image
         id: push-backend
@@ -50,7 +50,7 @@ jobs:
         id: meta-frontend
         uses: docker/metadata-action@v4
         with:
-          images: ${{ env.REGISTRY }}/devopsapp
+          images: ${{ env.REGISTRY }}/${{ github.repository }}/devopsapp
 
       - name: Build and push frontend Docker image
         id: push-frontend
