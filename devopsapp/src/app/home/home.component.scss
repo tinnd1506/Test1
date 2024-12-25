@@ -1,0 +1,29 @@
+h1 {
+    display: flex;
+    justify-content: center;
+}
+
+.home{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+    font-family: Arial, sans-serif;
+    color: #333;
+    font-size: 1.5rem;
+    text-align: center;
+    padding: 0 20px;
+}
+
+.home a{
+    color: #007bff;
+    text-decoration: none;
+    cursor: pointer;
+    margin: 10px;
+    
+}
+
+.home a:hover{
+    text-decoration: underline;
+}

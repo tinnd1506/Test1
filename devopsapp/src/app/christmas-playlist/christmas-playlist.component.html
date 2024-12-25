@@ -1,0 +1,13 @@
+<h1>Best Christmas Songs</h1>
+<div class="container" *ngIf="playlistUrls">
+  <div  class="video-container"  *ngFor="let videoUrl of playlistUrls">
+    <iframe
+      width="560"
+      height="315"
+      [src]="videoUrl | safeUrl"
+      frameborder="0"
+      allowfullscreen
+    ></iframe>
+  </div>
+</div>
+<p *ngIf="error">{{ error }}</p>

@@ -1,0 +1,12 @@
+<h1>Merry Christmas</h1>
+<div class="video-container" *ngIf="videoUrl">
+  <iframe
+    width="560"
+    height="315"
+    [src]="videoUrl | safeUrl"
+    frameborder="0"
+    allowfullscreen
+  ></iframe>
+</div>
+<p *ngIf="error">{{error}}</p>
+

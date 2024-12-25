@@ -1,0 +1,53 @@
+# Angular-specific
+devopsapp/.angular/
+devopsapp/.vscode/
+devopsapp/.idea/
+devopsapp/dist/
+devopsapp/node_modules/
+
+# Java backend-specific
+server/.vscode/
+server/.idea/
+server/target/ # Maven build output
+server/logs/   # Custom logs directory (if present)
+
+# General temporary files and logs
+*.tmp
+*.log
+/tmp/
+/out-tsc
+/bazel-out
+
+# Node.js debug logs
+npm-debug.log*
+yarn-error.log*
+
+# IDEs and editors
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# Visual Studio Code settings
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.history/*
+
+# Miscellaneous
+/.angular/cache
+.sass-cache/
+/connect.lock
+/coverage
+/libpeerconnection.log
+testem.log
+/typings
+
+# System files
+.DS_Store
+Thumbs.db
