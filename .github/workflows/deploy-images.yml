@@ -1,0 +1,79 @@
+name: Create and publish Docker images
+
+on:
+  push:
+    branches: ['release']
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  build-and-push-images:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+
+    steps:
+      # Step 1: Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: Log in to the Container registry
+      - name: Log in to the Container registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Step 3: Build and push the backend image
+      - name: Extract metadata for backend image
+        id: meta-backend
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.REGISTRY }}/server
+
+      - name: Build and push backend Docker image
+        id: push-backend
+        uses: docker/build-push-action@v5
+        with:
+          context: ./server
+          dockerfile: ./server/Dockerfile
+          push: true
+          tags: ${{ steps.meta-backend.outputs.tags }}
+          labels: ${{ steps.meta-backend.outputs.labels }}
+
+      # Step 4: Build and push the frontend image
+      - name: Extract metadata for frontend image
+        id: meta-frontend
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.REGISTRY }}/devopsapp
+
+      - name: Build and push frontend Docker image
+        id: push-frontend
+        uses: docker/build-push-action@v5
+        with:
+          context: ./devopsapp
+          dockerfile: ./devopsapp/Dockerfile
+          push: true
+          tags: ${{ steps.meta-frontend.outputs.tags }}
+          labels: ${{ steps.meta-frontend.outputs.labels }}
+
+      # Step 5: Generate artifact attestations for backend and frontend
+      - name: Generate backend artifact attestation
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-name: ${{ env.REGISTRY }}/server
+          subject-digest: ${{ steps.push-backend.outputs.digest }}
+          push-to-registry: true
+
+      - name: Generate frontend artifact attestation
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-name: ${{ env.REGISTRY }}/devopsapp
+          subject-digest: ${{ steps.push-frontend.outputs.digest }}
+          push-to-registry: true
