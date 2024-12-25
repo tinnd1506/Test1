@@ -1,3 +1,5 @@
+node_modules/
+
 # Angular-specific
 devopsapp/.angular/
 devopsapp/.vscode/
