@@ -1,13 +1,13 @@
 name: CI/CD Pipeline (Package building and linting)
 
-# Trigger workflows on specific events
-on:
-  pull_request:
-    branches:
-      - main
-  push:
-    branches:
-      - main
+  # Trigger workflows on specific events
+  on:
+    pull_request:
+      branches:
+        - main
+    push:
+      branches:
+        - main
 
 jobs:
   # Define the job for CI

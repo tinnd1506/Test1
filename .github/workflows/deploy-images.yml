@@ -1,8 +1,8 @@
 name: Create and publish Docker images
 
 on:
-  push:
-    branches: ['release']
+  pull_request:
+    branches: ['main']
     tags: ['v*']
 
 env:
@@ -39,6 +39,9 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/server
           tags: |
             type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=semver,pattern={{version}},prefix=v
 
       - name: Build and push backend Docker image
         id: push-backend
@@ -55,6 +58,11 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/devopsapp
+          tags: |
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=semver,pattern={{version}},prefix=v
 
       - name: Build and push frontend Docker image
         id: push-frontend
@@ -65,17 +73,3 @@ jobs:
           tags: ${{ steps.meta-frontend.outputs.tags }}
           labels: ${{ steps.meta-frontend.outputs.labels }}
 
-      # Step 5: Generate artifact attestations for backend and frontend
-      # - name: Generate backend artifact attestation
-      #   uses: actions/attest-build-provenance@v2
-      #   with:
-      #     subject-name: ${{ env.REGISTRY }}/server
-      #     subject-digest: ${{ steps.push-backend.outputs.digest }}
-      #     push-to-registry: true
-
-      # - name: Generate frontend artifact attestation
-      #   uses: actions/attest-build-provenance@v2
-      #   with:
-      #     subject-name: ${{ env.REGISTRY }}/devopsapp
-      #     subject-digest: ${{ steps.push-frontend.outputs.digest }}
-      #     push-to-registry: true
