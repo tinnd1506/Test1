@@ -1,13 +1,13 @@
 name: CI/CD Pipeline (Package building and linting)
 
-  # Trigger workflows on specific events
-  on:
-    pull_request:
-      branches:
-        - main
-    push:
-      branches:
-        - main
+# Trigger workflows on specific events
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
 
 jobs:
   # Define the job for CI
@@ -15,53 +15,53 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Step 1: Checkout the code from the repo
-    - name: Checkout Code
-      uses: actions/checkout@v3
+      # Step 1: Checkout the code from the repo
+      - name: Checkout Code
+        uses: actions/checkout@v3
 
-    # Step 2: Backend - Setup Java Environment
-    - name: Set up JDK 17
-      uses: actions/setup-java@v3
-      with:
-        java-version: 17
-        distribution: temurin
+      # Step 2: Backend - Setup Java Environment
+      - name: Set up JDK 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: temurin
 
-    # Step 3: Backend - Build and Test Spring Boot
-    - name: Backend - Build and Test
-      working-directory: ./server
-      run: |
-        mvn clean install
-        mvn test
+      # Step 3: Backend - Build and Test Spring Boot
+      - name: Backend - Build and Test
+        working-directory: ./server
+        run: |
+          mvn clean install
+          mvn test
 
-    # Step 4: Frontend - Setup Node.js Environment
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: 18
+      # Step 4: Frontend - Setup Node.js Environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
 
-    # Step 5: Frontend - Install Dependencies and Lint
-    - name: Frontend - Install and Lint
-      working-directory: ./devopsapp
-      run: |
-        npm ci
-        npm run lint
+      # Step 5: Frontend - Install Dependencies and Lint
+      - name: Frontend - Install and Lint
+        working-directory: ./devopsapp
+        run: |
+          npm ci
+          npm run lint
 
-    # Step 6: Frontend - Run Unit Tests
-    - name: Frontend - Unit Tests
-      working-directory: ./devopsapp
-      run: npm test -- --watch=false --no-progress
+      # Step 6: Frontend - Run Unit Tests
+      - name: Frontend - Unit Tests
+        working-directory: ./devopsapp
+        run: npm test -- --watch=false --no-progress
 
-    # Step 7: Frontend - Build the Angular Project
-    - name: Frontend - Build
-      working-directory: ./devopsapp
-      run: npm run build --prod
+      # Step 7: Frontend - Build the Angular Project
+      - name: Frontend - Build
+        working-directory: ./devopsapp
+        run: npm run build --prod
 
-    # Optional Step: Archive build artifacts
-    - name: Archive Build Artifacts
-      if: success()
-      uses: actions/upload-artifact@v3
-      with:
-        name: build-artifacts
-        path: |
-          ./devopsapp/dist/
-          ./server/target/
+      # Optional Step: Archive build artifacts
+      - name: Archive Build Artifacts
+        if: success()
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-artifacts
+          path: |
+            ./devopsapp/dist/
+            ./server/target/
