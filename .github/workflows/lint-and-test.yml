@@ -1,13 +1,13 @@
-name: CI/CD Pipeline (Package building and linting)
+name: Build, lint and test app
 
 # Trigger workflows on specific events
 on:
-  pull_request:
-    branches:
-      - main
+  # pull_request:
+  #   branches:
+  #     - main
   push:
     branches:
-      - main
+      - release
 
 jobs:
   # Define the job for CI
@@ -57,11 +57,11 @@ jobs:
         run: npm run build --prod
 
       # Optional Step: Archive build artifacts
-      - name: Archive Build Artifacts
-        if: success()
-        uses: actions/upload-artifact@v3
-        with:
-          name: build-artifacts
-          path: |
-            ./devopsapp/dist/
-            ./server/target/
+      # - name: Archive Build Artifacts
+      #   if: success()
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: build-artifacts
+      #     path: |
+      #       ./devopsapp/dist/
+      #       ./server/target/
