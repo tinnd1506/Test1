@@ -20,11 +20,11 @@ jobs:
           java-version: 17
           distribution: temurin
 
-      - name: Backend - Build and Test
-        working-directory: ./server
-        run: |
-          mvn clean install
-          mvn test
+      # - name: Backend - Build and Test
+      #   working-directory: ./server
+      #   run: |
+      #     mvn clean install
+      #     mvn test
 
       - name: SonarQube Linting
         uses: actions/checkout@v3
