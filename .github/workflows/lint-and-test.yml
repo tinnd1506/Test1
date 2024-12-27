@@ -52,8 +52,8 @@ jobs:
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
         run: |
           mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
-            -Dsonar.projectKey=tony \
-            -Dsonar.projectName='tony'
+            -Dsonar.projectKey=tony_api \
+            -Dsonar.projectName='tony_api'
 
       # Frontend Setup
       - name: Set up Node.js
