@@ -1,10 +1,7 @@
-name: Build, lint and test app
+name: Build, lint, and test app
 
 # Trigger workflows on specific events
 on:
-  # pull_request:
-  #   branches:
-  #     - main
   push:
     branches:
       - release
@@ -33,25 +30,54 @@ jobs:
           mvn clean install
           mvn test
 
-      # Step 4: Frontend - Setup Node.js Environment
+      # Step 4: Backend - SonarQube Linting
+      - name: SonarQube Linting
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Cache SonarQube packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: Cache Maven packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      - name: Build and analyze with SonarQube
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        run: |
+          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
+            -Dsonar.projectKey=tony \
+            -Dsonar.projectName='tony'
+
+      # Step 5: Frontend - Setup Node.js Environment
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 18
 
-      # Step 5: Frontend - Install Dependencies and Lint
+      # Step 6: Frontend - Install Dependencies and Lint
       - name: Frontend - Install and Lint
         working-directory: ./devopsapp
         run: |
           npm ci
           npm run lint
 
-      # Step 6: Frontend - Run Unit Tests
+      # Step 7: Frontend - Run Unit Tests
       - name: Frontend - Unit Tests
         working-directory: ./devopsapp
         run: npm test -- --watch=false --no-progress
 
-      # Step 7: Frontend - Build the Angular Project
+      # Step 8: Frontend - Build the Angular Project
       - name: Frontend - Build
         working-directory: ./devopsapp
         run: npm run build --prod
